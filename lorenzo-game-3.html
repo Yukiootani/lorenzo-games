@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LORENZO GAME 3 — Mega Evoluções, Mew Shiny Mega &amp; Arena Titã 3 vs 1</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style3.css" />
+</head>
+<body>
+  <!-- 3D WebGL Canvas Container -->
+  <div id="game-container"></div>
+
+  <!-- ================= OVERLAY DE DESTRUIÇÃO TOTAL ================= -->
+  <div id="destruction-overlay" class="destruction-overlay hidden">
+    <div class="destruction-flash"></div>
+    <svg class="destruction-cracks" viewBox="0 0 1000 600" preserveAspectRatio="none" aria-hidden="true">
+      <g stroke="#fff" stroke-width="3.2" fill="none" stroke-linecap="round" filter="url(#crackGlow)">
+        <defs>
+          <filter id="crackGlow">
+            <feGaussianBlur stdDeviation="3.5" result="blur" />
+            <feMerge>
+              <feMergeNode in="blur" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+        </defs>
+        <path d="M500,300 L420,210 L310,175 L180,95 L40,20" stroke="#facc15" stroke-width="4" />
+        <path d="M420,210 L460,120 L430,15" stroke="#f43f5e" stroke-width="2.5" />
+        <path d="M500,300 L610,220 L740,160 L880,70 L990,10" stroke="#22d3ee" stroke-width="4" />
+        <path d="M610,220 L660,115 L710,12" stroke="#facc15" stroke-width="2.4" />
+        <path d="M500,300 L380,350 L240,420 L95,520 L10,590" stroke="#f43f5e" stroke-width="4" />
+        <path d="M380,350 L310,490 L260,595" stroke="#fff" stroke-width="2.5" />
+        <path d="M500,300 L640,360 L790,450 L940,565" stroke="#facc15" stroke-width="4" />
+        <path d="M640,360 L600,480 L635,595" stroke="#22d3ee" stroke-width="2.6" />
+        <path d="M500,300 L490,180 L520,60 L505,0" stroke="#fff" stroke-width="3" />
+        <path d="M500,300 L515,430 L485,545 L500,600" stroke="#fff" stroke-width="3" />
+        <path d="M500,300 L310,295 L140,275 L0,310" stroke="#22d3ee" stroke-width="3" />
+        <path d="M500,300 L700,290 L860,315 L1000,280" stroke="#f43f5e" stroke-width="3" />
+        <polygon points="465,275 510,255 545,285 525,335 470,330" stroke="#facc15" stroke-width="3.5" fill="rgba(244,63,94,0.22)" />
+      </g>
+    </svg>
+    <div class="destruction-banner">
+      <div class="destruction-sub">⚡ SOBRECARGA MÁXIMA 3/3 ⚡</div>
+      <div id="destruction-title" class="destruction-title">DESTRUIÇÃO TOTAL!</div>
+    </div>
+  </div>
+
+  <!-- ================= BANNER PORTAL ARENA TITÃ ================= -->
+  <div id="raid-portal-overlay" class="raid-portal-overlay hidden">
+    <div class="raid-portal-card glass-panel">
+      <div class="raid-portal-tag">🏟️ PORTAL DA ARENA TITÃ ABERTO! 🏟️</div>
+      <div id="raid-portal-boss" class="raid-portal-boss">KYOGRE GIGANTE DESAFIA VOCÊ!</div>
+      <div id="raid-portal-sub" class="raid-portal-sub">Seus 3 últimos Pokémons capturados entrarão juntos na Arena 3 vs 1!</div>
+    </div>
+  </div>
+
+  <!-- ================= TELA INICIAL ================= -->
+  <div id="title-screen" class="overlay-screen active">
+    <div class="title-card glass-panel">
+      <div class="title-badge">🏟️ ARENA TITÃ 3 vs 1 (23 GIGANTES) • ✨ MEW SHINY MEGA • 📦 EQUIPE ATÉ 30</div>
+      <h1 class="game-logo">
+        <span class="logo-lorenzo">LORENZO</span>
+        <span class="logo-game">GAME <span class="logo-three">3</span></span>
+      </h1>
+      <p class="title-subtitle">
+        Jogue com <strong>Mew</strong> (até <strong>Shiny Mega Mew</strong>!), Miraidon, Lucario, Greninja, Snorlax, Aerodactyl e Charmander! A cada <strong>3 Pokémons diferentes capturados</strong>, uma <strong>Arena Titã especial</strong> se abre com 23 chefes gigantes (Koraidon, Salamence, Kyogre e +20) contra seus 3 últimos capturados!
+      </p>
+
+      <div id="setup-section" class="setup-section">
+        <div class="setup-block">
+          <div class="starter-label">1. ESCOLHA SEU POKÉMON INICIAL</div>
+          <div class="starter-grid four-col">
+            <button class="starter-card selected" data-starter="mew" type="button">
+              <div class="poke-avatar av-mew"></div>
+              <div class="starter-info">
+                <span class="starter-name">Mew</span>
+                <span class="evo-preview">✨ Shiny Mega Mew</span>
+                <span class="type-pill type-psiquico">PSÍQUICO</span>
+              </div>
+            </button>
+            <button class="starter-card" data-starter="miraidon" type="button">
+              <div class="poke-avatar av-miraidon"></div>
+              <div class="starter-info">
+                <span class="starter-name">Miraidon</span>
+                <span class="evo-preview">🧬 Mega Apex</span>
+                <span class="type-pill type-eletrico">ELÉTRICO</span>
+              </div>
+            </button>
+            <button class="starter-card" data-starter="lucario" type="button">
+              <div class="poke-avatar av-lucario"></div>
+              <div class="starter-info">
+                <span class="starter-name">Lucario</span>
+                <span class="evo-preview">🧬 Mega Lucario</span>
+                <span class="type-pill type-lutador">LUTADOR</span>
+              </div>
+            </button>
+            <button class="starter-card" data-starter="greninja" type="button">
+              <div class="poke-avatar av-greninja"></div>
+              <div class="starter-info">
+                <span class="starter-name">Greninja</span>
+                <span class="evo-preview">🧬 Mega Ash-Ninja</span>
+                <span class="type-pill type-agua">ÁGUA</span>
+              </div>
+            </button>
+            <button class="starter-card" data-starter="aerodactyl" type="button">
+              <div class="poke-avatar av-aerodactyl"></div>
+              <div class="starter-info">
+                <span class="starter-name">Aerodactyl</span>
+                <span class="evo-preview">🧬 Mega Aerodactyl</span>
+                <span class="type-pill type-pedra">PEDRA</span>
+              </div>
+            </button>
+            <button class="starter-card" data-starter="snorlax" type="button">
+              <div class="poke-avatar av-snorlax"></div>
+              <div class="starter-info">
+                <span class="starter-name">Snorlax</span>
+                <span class="evo-preview">🧬 Mega Gigamax</span>
+                <span class="type-pill type-normal">NORMAL</span>
+              </div>
+            </button>
+            <button class="starter-card" data-starter="charmander" type="button">
+              <div class="poke-avatar av-charmander"></div>
+              <div class="starter-info">
+                <span class="starter-name">Charmander</span>
+                <span class="evo-preview">🧬 Mega Charizard X</span>
+                <span class="type-pill type-fogo">FOGO</span>
+              </div>
+            </button>
+            <button class="starter-card" data-starter="ceruledge" type="button">
+              <div class="poke-avatar av-ceruledge"></div>
+              <div class="starter-info">
+                <span class="starter-name">Ceruledge</span>
+                <span class="evo-preview">🧬 Mega Ceruledge</span>
+                <span class="type-pill type-fantasma">FANTASMA</span>
+              </div>
+            </button>
+          </div>
+        </div>
+
+        <div class="setup-block">
+          <div class="starter-label">2. ESCOLHA A CIDADE INICIAL</div>
+          <div class="city-pills-grid">
+            <button class="city-pill selected" data-city="mesagoza" type="button">🌆 Praça Mesagoza</button>
+            <button class="city-pill" data-city="neotokyo" type="button">⚡ Neo Cyber Zero</button>
+            <button class="city-pill" data-city="vulcanica" type="button">🌋 Cratera Mega</button>
+            <button class="city-pill" data-city="ninja" type="button">🌊 Vila Ninja</button>
+            <button class="city-pill" data-city="prehistorico" type="button">⛰️ Santuário Mega</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="save-banner" class="save-banner hidden">
+        <span class="save-dot"></span>
+        <span id="save-banner-text">Progresso salvo encontrado!</span>
+      </div>
+
+      <div class="title-actions">
+        <button id="btn-play" class="btn-neon-primary" type="button">
+          <span class="btn-label">JOGAR</span>
+        </button>
+        <button id="btn-new-game" class="btn-glass-secondary hidden" type="button">
+          NOVO JOGO
+        </button>
+        <a href="index.html" class="btn-glass-secondary" style="text-decoration:none;display:inline-flex;align-items:center;gap:6px;">
+          🏠 PORTAL
+        </a>
+      </div>
+
+      <div class="title-controls-preview">
+        <span><kbd>WASD</kbd> Mover</span>
+        <span><kbd>Espaço</kbd> Pular</span>
+        <span><kbd>E</kbd> Evoluir / Shiny Mega</span>
+        <span><kbd>Q</kbd> Destruição Total</span>
+        <span><kbd>M</kbd> Cidades</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= HUD DE EXPLORAÇÃO ================= -->
+  <div id="explore-hud" class="hidden">
+    <div class="hud-top-left">
+      <div class="hud-top-line">
+        <div class="hud-brand glass-chip">
+          <span class="hud-brand-dot"></span>
+          <span class="hud-brand-title">LORENZO GAME 3</span>
+        </div>
+        <button id="btn-cities" class="glass-chip btn-chip btn-city" type="button">
+          <span>🗺️</span>
+          <span id="hud-city-name">Praça Mesagoza</span>
+          <span class="chip-arrow">▾</span>
+        </button>
+      </div>
+
+      <div class="hud-stats-row">
+        <div class="glass-chip stat-chip" title="Poké-Cubos">
+          <span class="cuboball-mini"></span>
+          <span id="hud-balls">15</span>
+        </div>
+        <div class="glass-chip stat-chip" title="Master-Cubos">
+          <span class="cuboball-mini super"></span>
+          <span id="hud-super-balls">6</span>
+        </div>
+        <button id="btn-dex" class="glass-chip btn-chip" type="button">
+          <span>📖</span>
+          <span>Pokédex <strong id="hud-dex-count">1/50</strong></span>
+        </button>
+        <button id="btn-heal-team" class="glass-chip btn-chip btn-heal" type="button">
+          <span>💚</span>
+          <span>Curar</span>
+        </button>
+        <button id="btn-mute" class="glass-chip btn-chip icon-only" type="button">
+          <span id="mute-icon">🔊</span>
+        </button>
+        <button id="btn-menu" class="glass-chip btn-chip icon-only" type="button">
+          <span>⚙️</span>
+        </button>
+        <a href="index.html" class="glass-chip btn-chip icon-only" style="text-decoration:none;pointer-events:auto;" title="Voltar ao Portal Lorenzo Games">
+          <span>🏠</span>
+        </a>
+      </div>
+
+      <!-- INSTANT EVOLVE / MEGA / SHINY MEGA BUTTON -->
+      <button id="btn-hud-evolve" class="btn-evolve-hud" type="button">
+        <span>🧬</span>
+        <span id="hud-evolve-text">EVOLUIR MEW → MEWTWO</span>
+        <kbd>E</kbd>
+      </button>
+
+      <!-- ARENA TITÃ 3 vs 1 TRACKER (EVERY 3 DIFFERENT CAPTURES!) -->
+      <div id="raid-tracker-box" class="raid-tracker-box glass-panel">
+        <div class="power-meter-top">
+          <span class="raid-meter-title">🏟️ ARENA TITÃ (3 vs 1 GIGANTE)</span>
+          <span id="raid-progress-text" class="power-orb-count">0 / 3 diferentes</span>
+        </div>
+        <div class="power-segments">
+          <div id="raid-seg-0" class="power-seg raid-seg"></div>
+          <div id="raid-seg-1" class="power-seg raid-seg"></div>
+          <div id="raid-seg-2" class="power-seg raid-seg"></div>
+        </div>
+        <div id="raid-next-hint" class="power-hint">Capture 3 Pokémons diferentes p/ desafiar um Titã Gigante!</div>
+      </div>
+
+      <!-- SPECIAL DESTRUCTION POWER METER (3 ORBS IN MAP) -->
+      <div id="power-meter-box" class="power-meter-box glass-panel">
+        <div class="power-meter-top">
+          <span class="power-meter-title">💥 PODER DE DESTRUIÇÃO</span>
+          <span id="power-orb-count" class="power-orb-count">0 / 3 Orbes</span>
+        </div>
+        <div class="power-segments">
+          <div id="orb-seg-0" class="power-seg"></div>
+          <div id="orb-seg-1" class="power-seg"></div>
+          <div id="orb-seg-2" class="power-seg"></div>
+        </div>
+        <button id="btn-hud-ultimate" class="btn-ultimate-hud" type="button" disabled>
+          <span>💥 ATIVAR DESTRUIÇÃO TOTAL</span>
+          <kbd>Q</kbd>
+        </button>
+        <div id="power-hint" class="power-hint">Colete 3 Orbes dourados espalhados pela cidade!</div>
+      </div>
+    </div>
+
+    <!-- Top Right: Mini-Equipe (UP TO 30 POKÉMON + DISCARD!) -->
+    <div id="mini-team-panel" class="glass-panel mini-team-panel">
+      <div class="panel-header-mini">
+        <span>MINHA EQUIPE</span>
+        <span id="team-count-badge" class="count-badge">1/30</span>
+      </div>
+      <div id="mini-team-list" class="mini-team-list"></div>
+      <div class="panel-footer-hint">Clique: liderar • 🧬: Evoluir • 🗑️: Descartar</div>
+    </div>
+
+    <div id="crosshair" class="crosshair hidden"></div>
+
+    <div id="target-prompt" class="target-prompt glass-chip hidden">
+      <span class="pulse-ring"></span>
+      <span id="target-prompt-text">Clique para batalhar!</span>
+    </div>
+
+    <!-- Evolution / Mega / Shiny Mega Banner -->
+    <div id="evo-banner" class="evo-banner hidden">
+      <div class="evo-banner-inner glass-panel">
+        <div id="evo-banner-tag" class="evo-banner-tag">🧬 MEGA EVOLUÇÃO DESPERTADA! 🧬</div>
+        <div id="evo-banner-title" class="evo-banner-title">MEW → SHINY MEGA MEW</div>
+        <div id="evo-banner-sub" class="evo-banner-sub">Poder máximo e golpes supremos liberados!</div>
+      </div>
+    </div>
+
+    <div class="hud-bottom-bar glass-chip">
+      <span><kbd>WASD</kbd> Andar</span>
+      <span class="sep">•</span>
+      <span><kbd>Espaço</kbd> Pular</span>
+      <span class="sep">•</span>
+      <span><kbd>E</kbd> Evoluir/Mega</span>
+      <span class="sep">•</span>
+      <span><kbd>Q</kbd> Destruição Total</span>
+      <span class="sep">•</span>
+      <span><kbd>M</kbd> Cidades</span>
+    </div>
+  </div>
+
+  <!-- ================= INTERFACE DE BATALHA (1v1 & ARENA TITÃ 3v1) ================= -->
+  <div id="battle-ui" class="hidden">
+    <div id="floating-fx-layer"></div>
+
+    <!-- Giant Boss Banner (Visible only in Titan Arena 3 vs 1!) -->
+    <div id="raid-boss-header" class="raid-boss-header glass-panel hidden">
+      <div class="raid-boss-top">
+        <span class="raid-crown">👑 ARENA TITÃ 3 vs 1 — CHEFE GIGANTE</span>
+        <span id="raid-boss-level" class="battle-level">Nv. 30</span>
+      </div>
+      <div class="raid-boss-mid">
+        <span id="raid-boss-name" class="raid-boss-name">KYOGRE GIGANTE</span>
+        <span id="raid-boss-type" class="type-pill type-agua">ÁGUA</span>
+        <span id="raid-boss-hp-text" class="hp-numbers">420 / 420</span>
+      </div>
+      <div class="hp-bar-track raid-hp-track">
+        <div id="raid-boss-hp-bar" class="hp-bar-fill" style="width: 100%"></div>
+      </div>
+    </div>
+
+    <!-- Standard Wild Card (1v1) -->
+    <div id="wild-card" class="battle-card wild-card glass-panel">
+      <div class="battle-card-top">
+        <div class="battle-name-wrap">
+          <span id="wild-name" class="battle-name">Koraidon</span>
+          <span id="wild-caught-badge" class="caught-badge hidden">★</span>
+        </div>
+        <span id="wild-level" class="battle-level">Nv. 15</span>
+      </div>
+      <div class="battle-type-row">
+        <span id="wild-type" class="type-pill type-dragao">DRAGÃO</span>
+        <span id="wild-hp-text" class="hp-numbers">120 / 120</span>
+      </div>
+      <div class="hp-bar-track">
+        <div id="wild-hp-bar" class="hp-bar-fill" style="width: 100%"></div>
+      </div>
+    </div>
+
+    <!-- 3-Fighter Squad Strip (Visible in Titan Arena 3 vs 1!) -->
+    <div id="raid-squad-strip" class="raid-squad-strip hidden"></div>
+
+    <!-- Standard Player Card (1v1) -->
+    <div id="player-card" class="battle-card player-card glass-panel">
+      <div class="battle-card-top">
+        <div class="battle-name-wrap">
+          <span id="player-mon-name" class="battle-name">Mew</span>
+        </div>
+        <span id="player-mon-level" class="battle-level">Nv. 15</span>
+      </div>
+      <div class="battle-type-row">
+        <span id="player-mon-type" class="type-pill type-psiquico">PSÍQUICO</span>
+        <span id="player-mon-hp-text" class="hp-numbers">125 / 125</span>
+      </div>
+      <div class="hp-bar-track">
+        <div id="player-mon-hp-bar" class="hp-bar-fill" style="width: 100%"></div>
+      </div>
+      <div class="xp-bar-row">
+        <span class="xp-label">XP</span>
+        <div class="xp-bar-track">
+          <div id="player-mon-xp-bar" class="xp-bar-fill" style="width: 0%"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Battle Dock -->
+    <div class="battle-dock">
+      <div class="battle-log-box glass-panel">
+        <div id="battle-log-text" class="battle-log-text">
+          Um Pokémon selvagem apareceu!
+        </div>
+      </div>
+
+      <div class="battle-controls-grid">
+        <div id="moves-grid" class="moves-grid">
+          <button class="move-btn" data-move-index="0" type="button"></button>
+          <button class="move-btn" data-move-index="1" type="button"></button>
+          <button class="move-btn" data-move-index="2" type="button"></button>
+          <button class="move-btn" data-move-index="3" type="button"></button>
+        </div>
+
+        <div class="battle-side-actions">
+          <button id="btn-battle-ultimate" class="side-action-btn btn-ultimate-battle" type="button" disabled>
+            <span class="side-icon">💥</span>
+            <span class="side-label">DESTRUIÇÃO TOTAL</span>
+            <span id="battle-ult-sub" class="side-sub">0/3 Orbes</span>
+          </button>
+
+          <button id="btn-battle-evolve" class="side-action-btn btn-evolve-battle" type="button">
+            <span class="side-icon">🧬</span>
+            <span class="side-label">MEGA EVOLUIR</span>
+            <span id="battle-evo-sub" class="side-sub">→ Mega</span>
+          </button>
+
+          <div class="side-mini-row">
+            <button id="btn-bag" class="side-action-btn btn-bag" type="button">
+              <span class="side-icon">🎒</span>
+              <span class="side-label">MOCHILA</span>
+            </button>
+            <button id="btn-switch" class="side-action-btn btn-switch" type="button">
+              <span class="side-icon">🔄</span>
+              <span class="side-label">EQUIPE</span>
+            </button>
+            <button id="btn-flee" class="side-action-btn btn-flee" type="button">
+              <span class="side-icon">🏃</span>
+              <span class="side-label">FUGIR</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bag Modal -->
+    <div id="bag-modal" class="battle-submodal hidden">
+      <div class="submodal-card glass-panel">
+        <div class="submodal-header">
+          <h3>🎒 MOCHILA MEGA DE LORENZO</h3>
+          <button id="btn-close-bag" class="btn-close-x" type="button">✕</button>
+        </div>
+        <div class="bag-items-list">
+          <button id="item-cuboball" class="bag-item-btn" type="button">
+            <div class="bag-item-icon"><span class="cuboball-mini lg"></span></div>
+            <div class="bag-item-info">
+              <div class="bag-item-title">Poké-Cubo</div>
+              <div class="bag-item-desc">Arremesse para capturar o Pokémon (funciona até nos Titãs!).</div>
+            </div>
+            <div id="bag-count-cuboball" class="bag-item-qty">x15</div>
+          </button>
+          <button id="item-superball" class="bag-item-btn" type="button">
+            <div class="bag-item-icon"><span class="cuboball-mini lg super"></span></div>
+            <div class="bag-item-info">
+              <div class="bag-item-title">Master-Cubo</div>
+              <div class="bag-item-desc">Taxa ultra alta (2.3x) — perfeito para Kyogre, Salamence e Megas!</div>
+            </div>
+            <div id="bag-count-superball" class="bag-item-qty">x6</div>
+          </button>
+          <button id="item-potion" class="bag-item-btn" type="button">
+            <div class="bag-item-icon potion-icon">🧪</div>
+            <div class="bag-item-info">
+              <div class="bag-item-title">Poção Mega</div>
+              <div class="bag-item-desc">Restaura 75% do HP máximo (cura todos os 3 na Arena Titã!).</div>
+            </div>
+            <div id="bag-count-potion" class="bag-item-qty">x6</div>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Switch Modal -->
+    <div id="switch-modal" class="battle-submodal hidden">
+      <div class="submodal-card glass-panel">
+        <div class="submodal-header">
+          <h3>🔄 TROCAR POKÉMON</h3>
+          <button id="btn-close-switch" class="btn-close-x" type="button">✕</button>
+        </div>
+        <div id="switch-list" class="switch-list"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= MAPA DAS 5 CIDADES ================= -->
+  <div id="cities-modal" class="overlay-screen modal-backdrop hidden">
+    <div class="cities-card glass-panel">
+      <div class="submodal-header">
+        <div>
+          <h3>🗺️ MAPA DAS 5 CIDADES MEGA</h3>
+          <p class="dex-subtitle">Capture 3 espécies diferentes para abrir a Arena Titã 3 vs 1!</p>
+        </div>
+        <button id="btn-close-cities" class="btn-close-x" type="button">✕</button>
+      </div>
+      <div id="cities-grid" class="cities-grid"></div>
+    </div>
+  </div>
+
+  <!-- ================= POKÉDEX MEGA & TITÃS ================= -->
+  <div id="dex-modal" class="overlay-screen modal-backdrop hidden">
+    <div class="dex-card glass-panel">
+      <div class="submodal-header">
+        <div>
+          <h3>📖 POKÉDEX MEGA &amp; TITÃS</h3>
+          <p class="dex-subtitle">Mew → Shiny Mega Mew, 23 Titãs Gigantes (Koraidon, Salamence, Kyogre e +20) e todas as Megas!</p>
+        </div>
+        <button id="btn-close-dex" class="btn-close-x" type="button">✕</button>
+      </div>
+      <div id="dex-grid" class="dex-grid"></div>
+    </div>
+  </div>
+
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- Three.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/three@0.147.0/build/three.min.js"
+          onerror="var s=document.createElement('script');s.src='https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js';document.head.appendChild(s);"></script>
+
+  <!-- Lorenzo Game 3 Modules -->
+  <script src="js3/audio3.js"></script>
+  <script src="js3/data3.js"></script>
+  <script src="js3/storage3.js"></script>
+  <script src="js3/voxels3.js"></script>
+  <script src="js3/cities3.js"></script>
+  <script src="js3/particles3.js"></script>
+  <script src="js3/battle3.js"></script>
+  <script src="js3/main3.js"></script>
+</body>
+</html>
