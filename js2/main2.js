@@ -45,41 +45,47 @@
       this._initBattle();
       this._initUI();
       this._bindInputs();
+      if (global.LorenzoMobile) global.LorenzoMobile.attachMobileControls(this);
 
       this.clock = new THREE.Clock();
       this._animate();
     }
 
     _initThree() {
+      const isMob = !!(global.LorenzoMobile && global.LorenzoMobile.isMobileDevice());
       this.container = document.getElementById('game-container');
       this.scene = new THREE.Scene();
       this.scene.background = new THREE.Color(0x67d2ff);
       this.scene.fog = new THREE.FogExp2(0x8be0ff, 0.0135);
 
-      this.camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 160);
+      const w = Math.max(1, window.innerWidth);
+      const h = Math.max(1, window.innerHeight);
+      this.camera = new THREE.PerspectiveCamera(h > w ? 72 : 60, w / h, 0.1, 160);
 
-      this.renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' });
-      this.renderer.setSize(window.innerWidth, window.innerHeight);
-      this.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
-      this.renderer.shadowMap.enabled = true;
-      this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+      this.renderer = new THREE.WebGLRenderer({ antialias: !isMob, powerPreference: 'default' });
+      this.renderer.setSize(w, h);
+      this.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, isMob ? 1.5 : 2));
+      this.renderer.shadowMap.enabled = !isMob;
+      if (!isMob) this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
       if (THREE.sRGBEncoding) this.renderer.outputEncoding = THREE.sRGBEncoding;
       this.container.appendChild(this.renderer.domElement);
 
-      const hemi = new THREE.HemisphereLight(0xdbeafe, 0x334155, 0.78);
+      const hemi = new THREE.HemisphereLight(0xdbeafe, 0x334155, isMob ? 0.92 : 0.78);
       this.scene.add(hemi);
 
-      this.sunLight = new THREE.DirectionalLight(0xfffbeb, 0.92);
+      this.sunLight = new THREE.DirectionalLight(0xfffbeb, isMob ? 1.0 : 0.92);
       this.sunLight.position.set(24, 38, -20);
-      this.sunLight.castShadow = true;
-      this.sunLight.shadow.mapSize.width = 2048;
-      this.sunLight.shadow.mapSize.height = 2048;
-      const d = 34;
-      this.sunLight.shadow.camera.left = -d;
-      this.sunLight.shadow.camera.right = d;
-      this.sunLight.shadow.camera.top = d;
-      this.sunLight.shadow.camera.bottom = -d;
-      this.sunLight.shadow.bias = -0.0005;
+      this.sunLight.castShadow = !isMob;
+      if (!isMob) {
+        this.sunLight.shadow.mapSize.width = 2048;
+        this.sunLight.shadow.mapSize.height = 2048;
+        const d = 34;
+        this.sunLight.shadow.camera.left = -d;
+        this.sunLight.shadow.camera.right = d;
+        this.sunLight.shadow.camera.top = d;
+        this.sunLight.shadow.camera.bottom = -d;
+        this.sunLight.shadow.bias = -0.0005;
+      }
       this.scene.add(this.sunLight);
 
       this.raycaster = new THREE.Raycaster();

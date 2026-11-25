@@ -1,0 +1,368 @@
+/* ================================================================
+   LORENZO GAMES — Shared Mobile Optimization & Touch Controls CSS
+   Reusable across Game 2, Game 3, and all future Lorenzo Games!
+   ================================================================ */
+
+/* Ensure full dynamic viewport height on iOS Safari & Android Chrome */
+html, body, #game-container {
+  height: 100dvh;
+  height: 100%;
+  touch-action: manipulation;
+  overscroll-behavior: none;
+}
+
+#game-container canvas {
+  touch-action: none;
+}
+
+/* Mobile Toggle Button for Mini-Team (hidden on desktop) */
+.mobile-team-toggle {
+  display: none;
+}
+
+/* Touch Controls Container (hidden on desktop mouse-only devices) */
+#mobile-touch-controls {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  pointer-events: none;
+}
+
+#mobile-touch-controls.active {
+  display: block;
+}
+
+/* Virtual Analog Joystick (Bottom Left) */
+.touch-joystick-zone {
+  position: absolute;
+  left: 18px;
+  bottom: max(22px, env(safe-area-inset-bottom, 22px));
+  width: 124px;
+  height: 124px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(15, 23, 42, 0.38) 0%, rgba(15, 23, 42, 0.68) 100%);
+  border: 2px solid rgba(34, 211, 238, 0.55);
+  box-shadow: 0 0 22px rgba(34, 211, 238, 0.25), inset 0 0 18px rgba(0, 0, 0, 0.45);
+  pointer-events: auto;
+  touch-action: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.touch-joystick-knob {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #22d3ee, #a855f7);
+  border: 2px solid rgba(255, 255, 255, 0.85);
+  box-shadow: 0 4px 16px rgba(34, 211, 238, 0.65);
+  transform: translate(0px, 0px);
+  pointer-events: none;
+}
+
+/* Ergonomic Action Buttons (Bottom Right) */
+.touch-actions-pad {
+  position: absolute;
+  right: 16px;
+  bottom: max(22px, env(safe-area-inset-bottom, 22px));
+  display: grid;
+  grid-template-columns: repeat(2, 62px);
+  gap: 10px;
+  pointer-events: auto;
+  touch-action: none;
+}
+
+.touch-btn {
+  width: 62px;
+  height: 62px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  background: rgba(12, 18, 36, 0.78);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: #fff;
+  font-family: 'Outfit', system-ui, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  cursor: pointer;
+  touch-action: none;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
+  transition: transform 0.1s ease;
+}
+
+.touch-btn:active {
+  transform: scale(0.9);
+}
+
+.touch-btn-ico { font-size: 1.3rem; line-height: 1; }
+.touch-btn-lbl { font-size: 0.58rem; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase; }
+
+.touch-btn-jump   { border-color: #22d3ee; background: rgba(6, 182, 212, 0.36); }
+.touch-btn-battle { border-color: #facc15; background: rgba(234, 179, 8, 0.38); }
+.touch-btn-evolve { border-color: #e879f9; background: rgba(168, 85, 247, 0.44); }
+.touch-btn-ult    { border-color: #ef4444; background: rgba(239, 68, 68, 0.42); }
+.touch-btn-ult.disabled { opacity: 0.35; border-color: rgba(255,255,255,0.2); background: rgba(15,23,42,0.55); }
+
+/* ================= MOBILE RESPONSIVE LAYOUT (<= 900px) ================= */
+@media (max-width: 900px), (pointer: coarse) {
+  /* Title Screen: never clip top on short/portrait mobile screens */
+  .overlay-screen {
+    align-items: flex-start !important;
+    padding: 12px 10px 28px !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .title-card {
+    padding: 18px 14px 16px !important;
+    margin: auto 0;
+  }
+
+  .title-badge {
+    font-size: 0.6rem !important;
+    padding: 4px 10px !important;
+    letter-spacing: 0.08em !important;
+  }
+
+  .title-subtitle {
+    font-size: 0.8rem !important;
+    margin-bottom: 12px !important;
+  }
+
+  .starter-grid,
+  .starter-grid.four-col {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 6px !important;
+  }
+
+  .starter-card {
+    padding: 6px 8px !important;
+    gap: 7px !important;
+  }
+
+  .title-actions {
+    flex-wrap: wrap;
+    gap: 8px !important;
+  }
+
+  .btn-neon-primary {
+    padding: 12px 32px !important;
+    font-size: 1rem !important;
+  }
+
+  .title-controls-preview {
+    display: none !important;
+  }
+
+  /* ===== EXPLORATION HUD: CLEAR 3D VIEW ON MOBILE! ===== */
+  .hud-top-left {
+    top: max(8px, env(safe-area-inset-top, 8px)) !important;
+    left: 8px !important;
+    right: 8px !important;
+    gap: 5px !important;
+    max-width: calc(100vw - 16px);
+  }
+
+  .hud-brand { display: none !important; }
+
+  .hud-top-line {
+    width: 100%;
+    justify-content: space-between;
+    gap: 6px !important;
+  }
+
+  .hud-stats-row {
+    gap: 5px !important;
+  }
+
+  .stat-chip, .btn-chip {
+    padding: 5px 9px !important;
+    font-size: 0.72rem !important;
+  }
+
+  /* Hide bulky desktop meters & evolve box to keep 3D screen wide open; show sleek mini pills instead */
+  .btn-evolve-hud {
+    display: none !important;
+  }
+
+  .raid-tracker-box,
+  .power-meter-box {
+    width: auto !important;
+    max-width: 210px !important;
+    padding: 5px 9px !important;
+    border-radius: 12px !important;
+  }
+
+  .raid-tracker-box .power-hint,
+  .power-meter-box .power-hint,
+  .power-meter-box .btn-ultimate-hud {
+    display: none !important;
+  }
+
+  .power-meter-top {
+    font-size: 0.58rem !important;
+    margin-bottom: 4px !important;
+    gap: 8px;
+  }
+
+  .power-segments {
+    margin-bottom: 0 !important;
+    gap: 4px !important;
+  }
+  .power-seg { height: 6px !important; }
+
+  /* Collapsible Mini-Team Drawer Button on Top-Right */
+  .mobile-team-toggle {
+    display: inline-flex !important;
+    align-items: center;
+    gap: 6px;
+    position: fixed;
+    top: max(8px, env(safe-area-inset-top, 8px));
+    right: 8px;
+    z-index: 24;
+    padding: 6px 11px;
+    border-radius: 999px;
+    border: 1.5px solid rgba(34, 211, 238, 0.75);
+    background: rgba(10, 16, 36, 0.86);
+    backdrop-filter: blur(12px);
+    color: #e0f2fe;
+    font-family: 'Orbitron', system-ui, sans-serif;
+    font-size: 0.68rem;
+    font-weight: 800;
+    cursor: pointer;
+    pointer-events: auto;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.45);
+  }
+
+  /* Mini-team hidden by default on mobile until tapped! */
+  .mini-team-panel {
+    display: none !important;
+    position: fixed !important;
+    top: 48px !important;
+    right: 8px !important;
+    left: auto !important;
+    width: min(290px, calc(100vw - 16px)) !important;
+    max-height: 68dvh !important;
+    z-index: 40 !important;
+  }
+
+  .mini-team-panel.mobile-open {
+    display: block !important;
+  }
+
+  .hud-bottom-bar { display: none !important; }
+
+  .target-prompt {
+    bottom: 162px !important;
+    padding: 6px 12px !important;
+    font-size: 0.74rem !important;
+    white-space: nowrap;
+  }
+
+  /* ===== BATTLE UI: WIDE OPEN 3D ARENA VIEW ON MOBILE! ===== */
+  .battle-card {
+    width: 175px !important;
+    padding: 8px 10px !important;
+    border-radius: 13px !important;
+  }
+  .battle-card.wild-card {
+    top: max(8px, env(safe-area-inset-top, 8px)) !important;
+    right: 8px !important;
+  }
+  .battle-card.player-card {
+    top: max(8px, env(safe-area-inset-top, 8px)) !important;
+    bottom: auto !important;
+    left: 8px !important;
+  }
+  .battle-name { font-size: 0.8rem !important; }
+  .battle-level { font-size: 0.66rem !important; padding: 1px 6px !important; }
+  .hp-numbers { font-size: 0.68rem !important; }
+  .hp-bar-track { height: 8px !important; }
+
+  /* Giant Boss Header & 3-Squad Strip Compact on Mobile */
+  .raid-boss-header {
+    top: max(6px, env(safe-area-inset-top, 6px)) !important;
+    padding: 7px 12px !important;
+    width: calc(100vw - 16px) !important;
+  }
+  .raid-crown { font-size: 0.58rem !important; }
+  .raid-boss-name { font-size: 0.9rem !important; }
+  .raid-hp-track { height: 10px !important; }
+
+  .raid-squad-strip {
+    top: 86px !important;
+    bottom: auto !important;
+    left: 8px !important;
+    right: 8px !important;
+    gap: 5px !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto;
+  }
+  .raid-ally-card {
+    flex: 1 1 0 !important;
+    min-width: 105px !important;
+    padding: 6px 7px !important;
+    border-radius: 11px !important;
+  }
+  .raid-ally-name { font-size: 0.66rem !important; }
+  .raid-ally-status { font-size: 0.55rem !important; }
+
+  /* Compact Battle Dock pinned neatly to bottom leaving center 3D arena completely visible! */
+  .battle-dock {
+    left: 8px !important;
+    right: 8px !important;
+    bottom: max(8px, env(safe-area-inset-bottom, 8px)) !important;
+    gap: 6px !important;
+  }
+
+  .battle-log-box {
+    padding: 7px 11px !important;
+    border-radius: 10px !important;
+  }
+  .battle-log-text {
+    font-size: 0.78rem !important;
+    min-height: 18px !important;
+  }
+
+  .battle-controls-grid {
+    grid-template-columns: 1fr !important;
+    gap: 6px !important;
+  }
+
+  .moves-grid {
+    gap: 6px !important;
+  }
+
+  .move-btn {
+    padding: 7px 9px !important;
+    border-radius: 10px !important;
+    gap: 3px !important;
+  }
+  .move-name { font-size: 0.76rem !important; }
+  .move-btn-bottom { font-size: 0.62rem !important; }
+
+  .battle-side-actions {
+    gap: 5px !important;
+  }
+
+  .side-action-btn {
+    padding: 7px 9px !important;
+    border-radius: 10px !important;
+  }
+  .side-label { font-size: 0.65rem !important; }
+  .side-sub { font-size: 0.62rem !important; }
+
+  /* Modals fit cleanly on phones */
+  .dex-card, .cities-card, .submodal-card {
+    padding: 15px 14px !important;
+    max-height: 88dvh !important;
+  }
+  .dex-grid, .cities-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
